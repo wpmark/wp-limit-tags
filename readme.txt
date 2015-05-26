@@ -1,5 +1,6 @@
 === Plugin Name ===
 Contributors: wpmarkuk, keithdevon
+Donate Link: http://markwilkinson.me/saythanks
 Tags: tags
 Requires at least: 4.2
 Tested up to: 4.2.2
@@ -24,6 +25,10 @@ To install the plugin:
 3. Visit the settings page under Settings > WP Limit Tags
 
 == Frequently Asked Questions ==
+
+None so far!
+
+== Screenshots ==
 
 None so far!
 
