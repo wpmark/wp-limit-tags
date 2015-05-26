@@ -9,6 +9,17 @@ License: GPLv2 or later
 */
 
 /**
+ * function wplt_on_activation()
+ * adds options on activation
+ */
+function wplt_on_activation() {
+
+    update_option( 'wplt_post_types', array() );
+}
+
+register_activation_hook( __FILE__, 'wplt_on_activation' );
+
+/**
  * function wplt_get_max_tags()
  *
  * gets the maximum number of tags allowed
