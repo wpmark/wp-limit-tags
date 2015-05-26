@@ -32,8 +32,7 @@ function wplt_get_max_tags( $default = 5 ) {
 
 /**
  * Function wplt_register_settings()
- * Register the settings for this plugin. Just a username and a
- * password for authenticating.
+ * Register the settings for this plugin.
  */
 function wplt_register_default_settings() {
 			
