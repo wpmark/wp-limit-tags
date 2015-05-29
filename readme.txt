@@ -4,7 +4,7 @@ Donate Link: http://markwilkinson.me/saythanks
 Tags: tags
 Requires at least: 4.2
 Tested up to: 4.2.2
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ WP Limit Tags allows you to set a maximum number of tags for posts.
 
 == Description ==
 
-The plugin provides a settings screen where you can set the maximum number of tags which are allowed to be assigned to posts. It also allows you to choose which post types have restricted tag assignment.
+The plugin provides a settings screen where you can set the maximum number of tags which are allowed to be assigned to posts. It also allows you to choose which post types have restricted tag assignment. It works for all taxonomies that are non-hierarchical.
 
 On the post edit screen, for those posts activated, you will not be allowed to add more than allowed number of tags.
 
@@ -33,6 +33,10 @@ None so far!
 None so far!
 
 == Changelog ==
+
+= 0.2 =
+* Load JS on the correct admin screen only
+* Remove the quick edit from any post type that has limited tags set. This prevents this from being used to add tags this way.
 
 = 0.1 =
 * Initial release

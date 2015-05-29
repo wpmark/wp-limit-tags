@@ -2,10 +2,21 @@
 /*
 Plugin Name: WP Limit Tags
 Description: This plugin allows you to limit the number of tags which can be added to a post from the post edit screen.
-Version: 0.1
+Version: 0.2
 Author: Mark Wilkinson
 Author URI: http://markwilkinson.me
 License: GPLv2 or later
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
 */
 
 /**
@@ -226,6 +237,63 @@ function wplt_admin_settings_content() {
 	<?php
 	
 }
+
+/**
+ *
+ */
+function wplt_remove_quick_edit( $actions, $post ) {
+
+	/* get the array of post type on which to limit the tags */
+	$post_types = get_option( 'wplt_post_types' );
+	
+	/* check this post type is in the post types array */
+	if( in_array( $post->post_type, $post_types ) ) {
+		
+		/* remove the inline action to remove quick editing */
+		unset( $actions[ 'inline hide-if-no-js' ] );
+		
+	}
+	
+	return $actions;
+	
+}
+
+add_filter( 'post_row_actions', 'wplt_remove_quick_edit', 10, 2 );
+
+/**
+ * function wplt_remove_edit_bulk_action()
+ */
+function wplt_remove_edit_bulk_action( $actions ) {
+	
+	/* check if a post type is set from the url */
+	if( isset( $_GET[ 'post_type' ] ) ) {
+		
+		$post_type = $_GET[ 'post_type' ];
+	
+	/* no post type is set in url */
+	} else {
+		
+		/* must be posts */
+		$post_type = 'post';
+		
+	}
+	
+	/* get the array of post type on which to limit the tags */
+	$post_types = get_option( 'wplt_post_types' );
+	
+	/* if this post type is in the post type array */
+	if( in_array( $post_type, $post_types ) ) {
+		
+		/* remove the edit action */
+		unset( $actions[ 'edit' ] );
+		
+	}
+	
+	return $actions;
+	
+}
+
+add_filter( 'bulk_actions-edit-post', 'wplt_remove_edit_bulk_action' );
 
 /**
  * function wplt_limit_tags_js()
