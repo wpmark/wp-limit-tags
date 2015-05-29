@@ -233,6 +233,14 @@ function wplt_admin_settings_content() {
  */
 function wplt_limit_tags_js() {
 	
+	/* get the current admin screen */
+	$screen = get_current_screen();
+	
+	/* if the screen base is not post */
+	if( $screen->base != 'post' ) {
+		return;
+	}
+	
 	/* get the array of post type on which to limit the tags */
 	$post_types = get_option( 'wplt_post_types' );
 	
