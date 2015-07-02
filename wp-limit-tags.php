@@ -333,11 +333,19 @@ function wplt_limit_tags_js() {
 			var maxtags = <?php echo intval( $maxtags ); ?>;
 			
 			/**
-			 * function hideaddtagsbutton()
+			 * function disabletags()
 			 * this hides the tags button and disables the input when max tags is reached
 			 */
-			function hideaddtagsbutton() {
+			function disbaletags() {
 				$( "input.newtag" ).prop('disabled', true );
+				$( ".tagadd" ).css( 'visibility', 'hidden' );
+			}
+			
+			/**
+			 * function disabletagsbutton()
+			 * this hides the tags button when max tags is reached
+			 */
+			function disabletagsbutton() {
 				$( ".tagadd" ).css( 'visibility', 'hidden' );
 			}
 			
@@ -351,19 +359,32 @@ function wplt_limit_tags_js() {
 			}
 			
 			/**
-			 * here we are checking for DOM changes within the tagcheclist element
+			 * here we are checking for DOM changes within the tagchecklist element
 			 * we a change is detected we run either hide or show
 			 * depending on whether the change is adding or removing an element
+			 * we also count number of tags added to the input and disable if more than max tags
 			 */
 			$(document).ready( function() {
 				$( '.tagchecklist' ).bind( "DOMSubtreeModified", function() {
 					var count = $(".tagchecklist > span").length;
 					if( count >= maxtags ) {
-						hideaddtagsbutton();
+						disbaletags();
 					} else {
 						showaddtagsbutton();
 					}
 				});
+				
+				/* count tags as tying in input */
+				$( "input.newtag" ).bind("keyup", function() {
+					var tags = $( "input.newtag" ).val();
+					var tagscount = tags.split( ',' ).length;
+					if( tagscount > maxtags ) {
+						disabletagsbutton();
+					} else {
+						showaddtagsbutton();
+					}
+				});
+				
 			});
 			
 		} )( jQuery );
