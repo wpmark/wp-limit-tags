@@ -331,7 +331,7 @@ function wplt_limit_tags_js() {
 			
 			/* set the maximum number of tags allowed - pulled from options */
 			var maxtags = <?php echo intval( $maxtags ); ?>;
-			
+					
 			/**
 			 * function disabletags()
 			 * this hides the tags button and disables the input when max tags is reached
@@ -369,6 +369,7 @@ function wplt_limit_tags_js() {
 			 * we also count number of tags added to the input and disable if more than max tags
 			 */
 			$(document).ready( function() {
+				
 				$( '.tagchecklist' ).bind( "DOMSubtreeModified", function() {
 					var count = $(".tagchecklist > span").length;
 					if( count >= maxtags ) {
