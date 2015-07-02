@@ -358,6 +358,10 @@ function wplt_limit_tags_js() {
 				$( ".tagadd" ).css( 'visibility', 'visible' );	
 			}
 			
+			function disableenter() {
+				
+			}
+			
 			/**
 			 * here we are checking for DOM changes within the tagchecklist element
 			 * we a change is detected we run either hide or show
@@ -375,18 +379,19 @@ function wplt_limit_tags_js() {
 				});
 				
 				/* count tags as tying in input */
-				$( "input.newtag" ).bind("keyup", function() {
+				$( "input.newtag" ).bind("keyup keypress", function(e) {
 					var tags = $( "input.newtag" ).val();
 					var tagscount = tags.split( ',' ).length;
 					if( tagscount > maxtags ) {
 						disabletagsbutton();
+						 e.preventDefault();
 					} else {
 						showaddtagsbutton();
 					}
 				});
 				
 			});
-			
+						
 		} )( jQuery );
 		
 	</script>
