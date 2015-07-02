@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Limit Tags
 Description: This plugin allows you to limit the number of tags which can be added to a post from the post edit screen.
-Version: 0.2
+Version: 0.3
 Author: Mark Wilkinson
 Author URI: http://markwilkinson.me
 License: GPLv2 or later

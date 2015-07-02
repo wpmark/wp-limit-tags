@@ -4,7 +4,7 @@ Donate Link: http://markwilkinson.me/saythanks
 Tags: tags
 Requires at least: 4.2
 Tested up to: 4.2.2
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ None so far!
 None so far!
 
 == Changelog ==
+
+= 0.3 =
+* Make sure tags get limited as you are typing in the tags input box.
 
 = 0.2 =
 * Load JS on the correct admin screen only
