@@ -380,9 +380,19 @@ function wplt_limit_tags_js() {
 				
 				/* count tags as tying in input */
 				$( "input.newtag" ).bind("keyup keypress", function(e) {
-					var tags = $( "input.newtag" ).val();
-					var tagscount = tags.split( ',' ).length;
-					if( tagscount > maxtags ) {
+					
+					/* get teh number of tags the user has entered into the input box */
+					var tags = $( "input.newtag" ).val();					
+					var inputtedtags = tags.split( ',' ).length;
+					
+					/* get the number of tags already added */
+					var addedtags = $(".tagchecklist > span").length;
+					
+					/* work how many tags can be added now - based on the maxtags and the number already added */
+					var tagsleft = maxtags - addedtags;
+					
+					/* if the tags inputted are greater than maxtags or greater than tagsleft to add */
+					if( inputtedtags > maxtags || inputtedtags > tagsleft ) {
 						disabletagsbutton();
 						 e.preventDefault();
 					} else {
