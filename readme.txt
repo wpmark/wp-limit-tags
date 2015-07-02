@@ -36,6 +36,9 @@ None so far!
 
 == Changelog ==
 
+= 0.3.1 =
+* Make sure it works when tags already present.
+
 = 0.3 =
 * Make sure tags get limited as you are typing in the tags input box.
 
