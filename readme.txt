@@ -36,6 +36,9 @@ None so far!
 
 == Changelog ==
 
+= 0.3.2 =
+* Prevent users from choosing tags from the tag cloud of most popular tags once the tag limit is reached. Thanks to [ezkay](https://wordpress.org/support/profile/ezkay) for reporting this issue.
+
 = 0.3.1 =
 * Make sure it works when tags already present.
 
