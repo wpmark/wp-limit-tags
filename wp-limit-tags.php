@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Limit Tags
 Description: This plugin allows you to limit the number of tags which can be added to a post from the post edit screen.
-Version: 0.3
+Version: 0.3.1
 Author: Mark Wilkinson
 Author URI: http://markwilkinson.me
 License: GPLv2 or later
@@ -331,7 +331,7 @@ function wplt_limit_tags_js() {
 			
 			/* set the maximum number of tags allowed - pulled from options */
 			var maxtags = <?php echo intval( $maxtags ); ?>;
-			
+					
 			/**
 			 * function disabletags()
 			 * this hides the tags button and disables the input when max tags is reached
@@ -362,6 +362,10 @@ function wplt_limit_tags_js() {
 				$( ".the-tagcloud" ).css( 'visibility', 'visible' );
 			}
 			
+			function disableenter() {
+				
+			}
+			
 			/**
 			 * here we are checking for DOM changes within the tagchecklist element
 			 * we a change is detected we run either hide or show
@@ -369,6 +373,7 @@ function wplt_limit_tags_js() {
 			 * we also count number of tags added to the input and disable if more than max tags
 			 */
 			$(document).ready( function() {
+				
 				$( '.tagchecklist' ).bind( "DOMSubtreeModified", function() {
 					var count = $(".tagchecklist > span").length;
 					if( count >= maxtags ) {
@@ -379,18 +384,29 @@ function wplt_limit_tags_js() {
 				});
 				
 				/* count tags as tying in input */
-				$( "input.newtag" ).bind("keyup", function() {
-					var tags = $( "input.newtag" ).val();
-					var tagscount = tags.split( ',' ).length;
-					if( tagscount > maxtags ) {
+				$( "input.newtag" ).bind("keyup keypress", function(e) {
+					
+					/* get teh number of tags the user has entered into the input box */
+					var tags = $( "input.newtag" ).val();					
+					var inputtedtags = tags.split( ',' ).length;
+					
+					/* get the number of tags already added */
+					var addedtags = $(".tagchecklist > span").length;
+					
+					/* work how many tags can be added now - based on the maxtags and the number already added */
+					var tagsleft = maxtags - addedtags;
+					
+					/* if the tags inputted are greater than maxtags or greater than tagsleft to add */
+					if( inputtedtags > maxtags || inputtedtags > tagsleft ) {
 						disabletagsbutton();
+						 e.preventDefault();
 					} else {
 						showaddtagsbutton();
 					}
 				});
 				
 			});
-			
+						
 		} )( jQuery );
 		
 	</script>
