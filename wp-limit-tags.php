@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Limit Tags
 Description: This plugin allows you to limit the number of tags which can be added to a post from the post edit screen.
-Version: 0.3.1
+Version: 0.3.2
 Author: Mark Wilkinson
 Author URI: http://markwilkinson.me
 License: GPLv2 or later
@@ -339,6 +339,8 @@ function wplt_limit_tags_js() {
 			function disbaletags() {
 				$( "input.newtag" ).prop('disabled', true );
 				$( ".tagadd" ).css( 'visibility', 'hidden' );
+				$( ".tagcloud-link" ).css( 'visibility', 'hidden' );
+				$( ".the-tagcloud" ).css( 'visibility', 'hidden' );
 			}
 			
 			/**
@@ -355,7 +357,9 @@ function wplt_limit_tags_js() {
 			 */
 			function showaddtagsbutton() {
 				$( "input.newtag" ).prop('disabled', false );
-				$( ".tagadd" ).css( 'visibility', 'visible' );	
+				$( ".tagadd" ).css( 'visibility', 'visible' );
+				$( ".tagcloud-link" ).css( 'visibility', 'visible' );
+				$( ".the-tagcloud" ).css( 'visibility', 'visible' );
 			}
 			
 			function disableenter() {
