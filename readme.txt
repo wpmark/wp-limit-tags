@@ -3,7 +3,7 @@ Contributors: wpmarkuk, keithdevon
 Donate Link: http://markwilkinson.me/saythanks
 Tags: tags
 Requires at least: 4.2
-Tested up to: 4.2.2
+Tested up to: 4.4
 Stable tag: 0.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,7 +16,7 @@ The plugin provides a settings screen where you can set the maximum number of ta
 
 On the post edit screen, for those posts activated, you will not be allowed to add more than allowed number of tags.
 
-[youtube http://www.youtube.com/watch?v=yWCzGP_l2QE]
+[youtube https://www.youtube.com/watch?v=5A5t2nZonV4]
 
 == Installation ==
 
