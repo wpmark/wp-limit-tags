@@ -16,7 +16,7 @@ The plugin provides a settings screen where you can set the maximum number of ta
 
 On the post edit screen, for those posts activated, you will not be allowed to add more than allowed number of tags.
 
-[youtube http://www.youtube.com/watch?v=yWCzGP_l2QE]
+[youtube https://www.youtube.com/watch?v=5A5t2nZonV4]
 
 == Installation ==
 
