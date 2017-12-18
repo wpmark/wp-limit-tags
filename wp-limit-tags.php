@@ -16,8 +16,20 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 */
+
+/**
+ * Function to run on plugins load for translation.
+ */
+function wplt_plugins_loaded() {
+
+	$locale = apply_filters( 'plugin_locale', get_locale(), 'wp-limit-tags' );
+	load_textdomain( 'wp-limit-tags', WP_LANG_DIR . '/wp-limit-tags/wp-limit-tags-' . $locale . '.mo' );
+	load_plugin_textdomain( 'wp-limit-tags', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+
+}
+
+add_action( 'plugins_loaded', 'wplt_plugins_loaded' );
 
 /**
  * Adds the default options on activation.
@@ -167,7 +179,7 @@ function wplt_admin_settings_content() {
 								
 								/* loop through each post type */
 								foreach ( $post_types as $post_type ) {
-									
+
 									/* if we should be ignoring this post type - move on */
 									if ( in_array( $post_type->name, $ignore_post_types, true ) ) {
 										continue;
