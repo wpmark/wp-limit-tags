@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Limit Tags
 Description: This plugin allows you to limit the number of tags which can be added to a post from the post edit screen.
-Version: 0.3.2
+Version: 1.0
 Author: Mark Wilkinson
 Author URI: http://markwilkinson.me
 License: GPLv2 or later
@@ -16,62 +16,72 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 */
 
 /**
- * function wplt_on_activation()
- * adds options on activation
+ * Function to run on plugins load for translation.
+ */
+function wplt_plugins_loaded() {
+
+	$locale = apply_filters( 'plugin_locale', get_locale(), 'wp-limit-tags' );
+	load_textdomain( 'wp-limit-tags', WP_LANG_DIR . '/wp-limit-tags/wp-limit-tags-' . $locale . '.mo' );
+	load_plugin_textdomain( 'wp-limit-tags', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+
+}
+
+add_action( 'plugins_loaded', 'wplt_plugins_loaded' );
+
+/**
+ * Adds the default options on activation.
  */
 function wplt_on_activation() {
 
-    update_option( 'wplt_post_types', array() );
+	// create the default post types array.
+	update_option( 'wplt_post_types', array() );
+
 }
 
 register_activation_hook( __FILE__, 'wplt_on_activation' );
 
 /**
- * function wplt_get_max_tags()
+ * Gets the maximum number of tags allowed.
  *
- * gets the maximum number of tags allowed
- * @param $default	int		the default number of tags to allow if none are returned - defaults to 5
- * @return 			int		max tags from options or the default if no max tags in options
+ * @param  int $default the default number of tags to allow if none are returned - defaults to 5.
+ * @return int          max tags from options or the default if no max tags in options.
  */
 function wplt_get_max_tags( $default = 5 ) {
-	
+
 	/* get the max tags from options */
 	$maxtags = get_option( 'wplt_max_tags' );
-	
+
 	/* check max tags are returned */
-	if( empty( $maxtags ) ) {
+	if ( empty( $maxtags ) ) {
 		return $default;
 	}
 
 	/* returned the max tags from options */
-	return $maxtags;
-	
+	return apply_filters( 'wplt_max_tags', $maxtags );
+
 }
 
 /**
- * Function wplt_register_settings()
  * Register the settings for this plugin.
  */
 function wplt_register_default_settings() {
-			
-	/* register a setting for the username */
-	register_setting( 'wplt_settings', 'wplt_max_tags','intval' );
+
+	// register a setting for the username.
+	register_setting( 'wplt_settings', 'wplt_max_tags', 'intval' );
 	register_setting( 'wplt_settings', 'wplt_post_types' );
-		
+
 }
 
 add_action( 'admin_init', 'wplt_register_default_settings' );
 
 /**
- * function wplt_add_settings_menu()
- * adds the sub menu page for the wp limit tags settings
+ * Adds the sub menu page for the wp limit tags settings.
  */
 function wplt_add_settings_menu() {
-	
+
 	add_submenu_page(
 		'options-general.php',
 		'WP Limit Tags',
@@ -80,14 +90,13 @@ function wplt_add_settings_menu() {
 		'wplt_settings',
 		'wplt_admin_settings_content'
 	);
-	
+
 }
 
 add_action( 'admin_menu', 'wplt_add_settings_menu' );
 
 /**
- * function wplt_admin_settings_content()
- * outputs the contents on the admin settings page
+ * Outputs the content of the settings screen.
  */
 function wplt_admin_settings_content() {
 	
@@ -131,19 +140,19 @@ function wplt_admin_settings_content() {
 					<tr valign="top">
 						
 						<th scope="row">
-							<label for="wplt_max_tags">Max Allowed Tags per Post</label>
+							<label for="wplt_max_tags"><?php esc_html_e( 'Max Allowed Tags per Post', 'wp-limit-tags' ); ?></label>
 						</th>
 						
 						<td>
 							<input type="number" name="wplt_max_tags" value="<?php echo esc_attr( wplt_get_max_tags() ); ?>" />
-							<p class="description">Enter the maximum amount of tags each post is allowed to have assigned to it.</p>
+							<p class="description"><?php esc_html_e( 'Enter the maximum amount of tags each post is allowed to have assigned to it.', 'wp-limit-tags' ); ?></p>
 						</td>
 					
 					</tr>
 					
 					<tr valign="top">
 						
-						<th scope="row">Enabled Post Types</th>
+						<th scope="row"><?php esc_html_e( 'Enabled Post Types', 'wp-limit-tags' ); ?></th>
 						
 						<td>
 							
@@ -156,20 +165,23 @@ function wplt_admin_settings_content() {
 										'attachment',
 										'revision',
 										'nav_menu_item',
+										'customize_changeset',
+										'custom_css',
+										'oembed_cache'
 									)
 								);
 								
 								/* get the current saved post types */
-								$saved_post_types = get_option( 'wplt_post_types' );
+								$saved_post_types = get_option( 'wplt_post_types', array() );
 								
 								/* get all the post types */
-								$post_types = get_post_types( '', 'objects' ); 
+								$post_types = get_post_types( '', 'objects' );
 								
 								/* loop through each post type */
 								foreach ( $post_types as $post_type ) {
-									
+
 									/* if we should be ignoring this post type - move on */
-									if( in_array( $post_type->name, $ignore_post_types ) ) {
+									if ( in_array( $post_type->name, $ignore_post_types, true ) ) {
 										continue;
 									}
 									
@@ -177,7 +189,7 @@ function wplt_admin_settings_content() {
 									$post_type_name = $post_type->labels->name;
 									
 									/* check whether this post type is in the current saved post types */
-									if( in_array( $post_type->name, $saved_post_types ) ) {
+									if ( in_array( $post_type->name, $saved_post_types, true ) ) {
 										
 										/* set this as checked */
 										$checked = ' checked="checked"';
@@ -199,7 +211,7 @@ function wplt_admin_settings_content() {
 							?>
 							
 							<input type="hidden" name="wplt_post_types[]" value="default" />
-							<p class="description">Tick which posts types tag limiting should be activated on.</p>
+							<p class="description"><?php esc_html_e( 'Tick which posts types tag limiting should be activated on.', 'wp-limit-tags' ); ?></p>
 						</td>
 					
 					</tr>
@@ -218,7 +230,7 @@ function wplt_admin_settings_content() {
 			</table>
 			
 			<p class="submit">
-				<input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes">
+				<input type="submit" name="submit" id="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'wp-limit-tags' ); ?>">
 			</p>
 			
 		</form>
@@ -239,7 +251,11 @@ function wplt_admin_settings_content() {
 }
 
 /**
+ * Removes the ability to quick edit for posts where limit tags is active.
  *
+ * @param  array   $actions An array of row action links. Defaults are 'Edit', 'Quick Edit', 'Restore', 'Trash', 'Delete Permanently', 'Preview', and 'View'.
+ * @param  WP_Post $post    The current post object.
+ * @return array            The modified array of actions.
  */
 function wplt_remove_quick_edit( $actions, $post ) {
 
@@ -261,7 +277,10 @@ function wplt_remove_quick_edit( $actions, $post ) {
 add_filter( 'post_row_actions', 'wplt_remove_quick_edit', 10, 2 );
 
 /**
- * function wplt_remove_edit_bulk_action()
+ * Remove the ability to bulk edit posts which have limit tags active.
+ *
+ * @param  array $actions An array of bulk edit actions.
+ * @return array          The modifed array of actions.
  */
 function wplt_remove_edit_bulk_action( $actions ) {
 	
@@ -296,123 +315,30 @@ function wplt_remove_edit_bulk_action( $actions ) {
 add_filter( 'bulk_actions-edit-post', 'wplt_remove_edit_bulk_action' );
 
 /**
- * function wplt_limit_tags_js()
- * outputs the javascript for the plugin to work
+ * Enqueue the admin scripts if this post type is a selected post type to limit tags on.
  */
-function wplt_limit_tags_js() {
-	
-	/* get the current admin screen */
+function wplt_enqueue_scripts() {
+
+	// get the posts types where limit tags should be used.
+	$wplt_post_types = get_option( 'wplt_post_types', array() );
+
+	// get the current screen parameters.
 	$screen = get_current_screen();
-	
-	/* if the screen base is not post */
-	if( $screen->base != 'post' ) {
+
+	// check whether this posts post type is one we should be limiting.
+	if ( ! in_array( $screen->post_type, $wplt_post_types, true ) ) {
 		return;
 	}
-	
-	/* get the array of post type on which to limit the tags */
-	$post_types = get_option( 'wplt_post_types' );
-	
-	/* get this posts post type */
-	$this_post_type = get_post_type( $_GET[ 'post' ] );
-	
-	/* check whether this posts post type is one we should be limiting */
-	if( ! in_array( $this_post_type, $post_types ) ) {
-		return;
-	}
-	
-	/* get the max tags from options */
-	$maxtags = wplt_get_max_tags();
-	
-	?>
-	
-	<script type="text/javascript">
-		
-		( function( $ ) {
-			
-			/* set the maximum number of tags allowed - pulled from options */
-			var maxtags = <?php echo intval( $maxtags ); ?>;
-					
-			/**
-			 * function disabletags()
-			 * this hides the tags button and disables the input when max tags is reached
-			 */
-			function disbaletags() {
-				$( "input.newtag" ).prop('disabled', true );
-				$( ".tagadd" ).css( 'visibility', 'hidden' );
-				$( ".tagcloud-link" ).css( 'visibility', 'hidden' );
-				$( ".the-tagcloud" ).css( 'visibility', 'hidden' );
-			}
-			
-			/**
-			 * function disabletagsbutton()
-			 * this hides the tags button when max tags is reached
-			 */
-			function disabletagsbutton() {
-				$( ".tagadd" ).css( 'visibility', 'hidden' );
-			}
-			
-			/**
-			 * function showaddtagsbutton()
-			 * this shows the tags button and enables the input when below max tags
-			 */
-			function showaddtagsbutton() {
-				$( "input.newtag" ).prop('disabled', false );
-				$( ".tagadd" ).css( 'visibility', 'visible' );
-				$( ".tagcloud-link" ).css( 'visibility', 'visible' );
-				$( ".the-tagcloud" ).css( 'visibility', 'visible' );
-			}
-			
-			function disableenter() {
-				
-			}
-			
-			/**
-			 * here we are checking for DOM changes within the tagchecklist element
-			 * we a change is detected we run either hide or show
-			 * depending on whether the change is adding or removing an element
-			 * we also count number of tags added to the input and disable if more than max tags
-			 */
-			$(document).ready( function() {
-				
-				$( '.tagchecklist' ).bind( "DOMSubtreeModified", function() {
-					var count = $(".tagchecklist > span").length;
-					if( count >= maxtags ) {
-						disbaletags();
-					} else {
-						showaddtagsbutton();
-					}
-				});
-				
-				/* count tags as tying in input */
-				$( "input.newtag" ).bind("keyup keypress", function(e) {
-					
-					/* get teh number of tags the user has entered into the input box */
-					var tags = $( "input.newtag" ).val();					
-					var inputtedtags = tags.split( ',' ).length;
-					
-					/* get the number of tags already added */
-					var addedtags = $(".tagchecklist > span").length;
-					
-					/* work how many tags can be added now - based on the maxtags and the number already added */
-					var tagsleft = maxtags - addedtags;
-					
-					/* if the tags inputted are greater than maxtags or greater than tagsleft to add */
-					if( inputtedtags > maxtags || inputtedtags > tagsleft ) {
-						disabletagsbutton();
-						 e.preventDefault();
-					} else {
-						showaddtagsbutton();
-					}
-				});
-				
-			});
-						
-		} )( jQuery );
-		
-	</script>
-	
-	<?php
-	
+
+	wp_enqueue_script( 'wplt_js', plugins_url( '/assets/js/wp-limit-tags.js', __FILE__ ), array( 'jquery' ), false, true );
+
+	// localise the script so we can use our max tags option setting.
+	$wplt_localised_js = array(
+		'max_tags' => wplt_get_max_tags()
+	);
+
+	wp_localize_script( 'wplt_js', 'wplt', $wplt_localised_js );
+
 }
 
-add_action( 'admin_print_scripts', 'wplt_limit_tags_js', 20 );
+add_action( 'admin_enqueue_scripts', 'wplt_enqueue_scripts' );
