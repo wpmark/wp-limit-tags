@@ -1,10 +1,9 @@
 === Plugin Name ===
-Contributors: wpmarkuk, keithdevon
-Donate Link: http://markwilkinson.me/saythanks
+Contributors: wpmarkuk, keithdevon, highrisedigital
 Tags: tags
 Requires at least: 4.2
-Tested up to: 4.4
-Stable tag: 0.3.2
+Tested up to: 4.9.1
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +34,14 @@ None so far!
 None so far!
 
 == Changelog ==
+
+= 1.0 =
+* Improvements to code to better meet the WP.org coding standards.
+* Introduce new filter `wplt_max_tags` for filtering the max tags.
+* Better prepare the plugin for translation, making sure strings are translation ready and the plugin text domain is loaded.
+* Load JS as an external file rather than with admin print scripts.
+* Add the newly added built in post types to the ignore array e.g. Custom CSS and Customize changesets.
+* Fix some php warning notices.
 
 = 0.3.2 =
 * Prevent users from choosing tags from the tag cloud of most popular tags once the tag limit is reached. Thanks to [ezkay](https://wordpress.org/support/profile/ezkay) for reporting this issue.
